@@ -191,6 +191,31 @@ testing the Claude plugin.
 Snowflake administrators should start with
 [docs/snowflake-admin-setup.md](docs/snowflake-admin-setup.md).
 
+Minimum OAuth setup:
+
+```sql
+USE ROLE ACCOUNTADMIN;
+
+CREATE SECURITY INTEGRATION METATATE_CLAUDE_CODE_OAUTH
+  TYPE = OAUTH
+  OAUTH_CLIENT = CUSTOM
+  ENABLED = TRUE
+  OAUTH_CLIENT_TYPE = 'CONFIDENTIAL'
+  OAUTH_REDIRECT_URI = 'http://localhost:8080/callback'
+  OAUTH_ALLOW_NON_TLS_REDIRECT_URI = TRUE
+  OAUTH_ISSUE_REFRESH_TOKENS = TRUE;
+
+ALTER SECURITY INTEGRATION METATATE_CLAUDE_CODE_OAUTH
+  SET ALLOWED_ROLES_LIST = ('<CLAUDE_SNOWFLAKE_ROLE>')
+      PRE_AUTHORIZED_ROLES_LIST = ('<CLAUDE_SNOWFLAKE_ROLE>');
+
+ALTER USER <snowflake_user>
+  ADD DELEGATED AUTHORIZATION OF ROLE <CLAUDE_SNOWFLAKE_ROLE>
+  TO SECURITY INTEGRATION METATATE_CLAUDE_CODE_OAUTH;
+
+SELECT SYSTEM$SHOW_OAUTH_CLIENT_SECRETS('METATATE_CLAUDE_CODE_OAUTH');
+```
+
 The important alignment is:
 
 - OAuth integration allows the same role that users pass as
@@ -226,3 +251,10 @@ See [SECURITY.md](SECURITY.md) for reporting and handling security issues.
 ## Release Notes
 
 See [CHANGELOG.md](CHANGELOG.md).
+
+Plugin releases are tagged as `v0.1.0`, `v0.2.0`, and so on. Keep the
+`version` fields in `.claude-plugin/marketplace.json` and
+`plugins/metatate/.claude-plugin/plugin.json` aligned with the release tag.
+
+For enterprise rollout, teams can pin the Claude marketplace to a branch or tag
+when they add the marketplace, then move to a newer tag after internal testing.
