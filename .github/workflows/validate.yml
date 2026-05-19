@@ -1,0 +1,50 @@
+name: Validate
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+    tags:
+      - "v*"
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Install Claude Code
+        run: npm install -g @anthropic-ai/claude-code
+
+      - name: Validate Claude marketplace
+        run: claude plugin validate .
+
+      - name: Validate Claude plugin
+        run: claude plugin validate plugins/metatate
+
+      - name: Validate helper shell syntax
+        run: bash -n plugins/metatate/bin/metatate-mcp-add
+
+      - name: Validate helper role-scoped OAuth output
+        run: |
+          output="$(
+            plugins/metatate/bin/metatate-mcp-add \
+              --account-url https://example.snowflakecomputing.com \
+              --client-id TEST_CLIENT_ID \
+              --snowflake-role METATATE_CLAUDE_USER \
+              --config-scope user
+          )"
+          printf '%s\n' "$output"
+          printf '%s' "$output" | grep -q 'claude mcp add-json'
+          printf '%s' "$output" | grep -q 'session:role:METATATE_CLAUDE_USER'
+
+      - name: Lint Markdown
+        run: npx --yes markdownlint-cli2 "**/*.md"

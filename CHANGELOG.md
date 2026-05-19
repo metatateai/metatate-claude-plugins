@@ -8,3 +8,5 @@
 - Added Snowflake-managed MCP setup documentation.
 - Added OAuth role-scoped MCP registration guidance using
   `session:role:<snowflake-role>`.
+- Added GitHub Actions validation for the marketplace, plugin, helper script,
+  role-scoped OAuth output, and Markdown docs.

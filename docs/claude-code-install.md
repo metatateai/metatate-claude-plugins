@@ -32,7 +32,24 @@ Restart Claude Code if prompted.
 
 ## 2. Register The MCP Server
 
-Run this in your terminal:
+If you cloned the marketplace repository locally, run this in your terminal:
+
+```bash
+./plugins/metatate/bin/metatate-mcp-add \
+  --account-url https://<account-url> \
+  --client-id <snowflake-oauth-client-id> \
+  --snowflake-role <snowflake-role> \
+  --config-scope user \
+  --run
+```
+
+When prompted, paste the OAuth client secret.
+
+If your administrator gave you a different app database, schema, or MCP server
+name, add `--app`, `--schema`, or `--server`.
+
+If you do not have a local clone of the marketplace repository, register the
+equivalent MCP config directly:
 
 ```bash
 claude mcp add-json --scope user --client-secret metatate '{
@@ -45,11 +62,6 @@ claude mcp add-json --scope user --client-secret metatate '{
   }
 }'
 ```
-
-When prompted, paste the OAuth client secret.
-
-If your administrator gave you a different app database, schema, or MCP server
-name, update the URL path.
 
 ## 3. Authenticate
 

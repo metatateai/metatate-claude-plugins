@@ -41,6 +41,7 @@ metatate-claude-plugins/
     prompts.md
   SECURITY.md
   CHANGELOG.md
+  LICENSE
 ```
 
 ## Requirements
@@ -85,19 +86,16 @@ The plugin and the MCP connection are separate:
 - The MCP connection gives Claude Code access to the Snowflake-managed Metatate
   tools.
 
-Register the MCP server in your terminal. Replace the placeholders with values
-from your Snowflake administrator:
+If you cloned this repository locally, register the MCP server with the helper.
+Replace the placeholders with values from your Snowflake administrator:
 
 ```bash
-claude mcp add-json --scope user --client-secret metatate '{
-  "type": "http",
-  "url": "https://<account-url>/api/v2/databases/METATATE_APP/schemas/CORE/mcp-servers/METATATE_MCP",
-  "oauth": {
-    "clientId": "<snowflake-oauth-client-id>",
-    "callbackPort": 8080,
-    "scopes": "session:role:<snowflake-role>"
-  }
-}'
+./plugins/metatate/bin/metatate-mcp-add \
+  --account-url https://<account-url> \
+  --client-id <snowflake-oauth-client-id> \
+  --snowflake-role <snowflake-role> \
+  --config-scope user \
+  --run
 ```
 
 Claude Code will prompt for the OAuth client secret. Do not paste the client
@@ -107,16 +105,18 @@ The `session:role:<snowflake-role>` scope is required. It makes Snowflake issue
 the OAuth session for the intended Metatate role instead of falling back to the
 user's default role or secondary role `ALL`.
 
-If you cloned this repository locally, you can use the helper instead of
-hand-writing the JSON:
+The helper generates the equivalent `claude mcp add-json` command:
 
-```bash
-./plugins/metatate/bin/metatate-mcp-add \
-  --account-url https://<account-url> \
-  --client-id <snowflake-oauth-client-id> \
-  --snowflake-role <snowflake-role> \
-  --config-scope user \
-  --run
+```json
+{
+  "type": "http",
+  "url": "https://<account-url>/api/v2/databases/METATATE_APP/schemas/CORE/mcp-servers/METATATE_MCP",
+  "oauth": {
+    "clientId": "<snowflake-oauth-client-id>",
+    "callbackPort": 8080,
+    "scopes": "session:role:<snowflake-role>"
+  }
+}
 ```
 
 ## Authenticate
@@ -203,20 +203,12 @@ The important alignment is:
 
 Start with [docs/troubleshooting.md](docs/troubleshooting.md).
 
-The most common OAuth error is:
-
-```text
-The role ALL requested has been explicitly blocked for use with this application.
-```
-
-Fix it by registering Claude MCP with:
-
-```json
-"scopes": "session:role:<snowflake-role>"
-```
-
-and by ensuring the Snowflake OAuth integration explicitly allows that same
-role.
+| Symptom | Likely Cause | Fix |
+| --- | --- | --- |
+| `The role ALL requested has been explicitly blocked for use with this application.` | Claude requested the user's default role or secondary role `ALL`. | Re-register MCP with `--snowflake-role <role>` so Claude sends `session:role:<role>`, and confirm the OAuth integration allows the same role. |
+| Browser login succeeds but Claude still shows disconnected. | Callback port or redirect URI mismatch. | Keep Snowflake `OAUTH_REDIRECT_URI` and Claude `callbackPort` aligned, normally `http://localhost:8080/callback`. |
+| Claude cannot find Metatate tools. | MCP URL or Native App MCP registration is wrong. | Confirm the URL points to `METATATE_APP.CORE.METATATE_MCP` or your deployed equivalent. |
+| Slash commands are missing. | Plugin was not enabled or Claude Code needs a restart. | Check `/plugin`, enable `metatate@metatate-claude-plugins`, then restart Claude Code. |
 
 ## Security Notes
 
