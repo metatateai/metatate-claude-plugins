@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.1.1
+
+- Added quick access to the Metatate Snowflake Marketplace listing from the
+  main README prerequisites.
+- Reworked smoke tests and example prompts to discover governed assets first
+  and use customer-specific placeholders instead of demo table names.
+
 ## 0.1.0
 
 - Initial public Metatate Claude Code plugin marketplace.

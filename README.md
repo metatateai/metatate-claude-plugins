@@ -48,7 +48,9 @@ metatate-claude-plugins/
 
 For the Snowflake administrator:
 
-- Metatate Snowflake Native App installed in the target Snowflake account.
+- Metatate Snowflake Native App installed in the target Snowflake account. If
+  it is not installed yet, start from the
+  [Snowflake Marketplace listing](https://app.snowflake.com/marketplace/listing/GZ2FTZU03OAS).
 - The app exposes the managed MCP server, normally
   `METATATE_APP.CORE.METATATE_MCP`.
 - A Snowflake role for Claude users. Use a least-privilege role that is allowed
@@ -139,8 +141,15 @@ After authentication, run:
 /metatate:discover-context
 ```
 
-Ask for a known governed database, schema, domain, sensitivity level, or
-compliance framework in your Metatate environment.
+Ask Metatate to find governed assets available in your environment:
+
+```text
+Show governed assets I can inspect. If you need to narrow the search, ask me
+for a database, schema, domain, sensitivity level, or compliance tag.
+```
+
+Pick one fully qualified table name returned by Metatate before running the
+next checks.
 
 Then test one decision workflow:
 
@@ -151,7 +160,8 @@ Then test one decision workflow:
 Example prompt:
 
 ```text
-Can role ANALYST use METATATE_TEST_DB.PUBLIC.CUSTOMERS for analytics?
+Can role <your-snowflake-role> read <fully-qualified-governed-table> for
+<your-intended-use>?
 ```
 
 Claude should call the Metatate MCP tools and return a governed result with

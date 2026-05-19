@@ -91,10 +91,12 @@ Then ask for a governed context your Metatate deployment knows about, for
 example:
 
 ```text
-Find governed customer data with PII in the analytics domain.
+Show governed assets I can inspect. If you need to narrow the search, ask me
+for a database, schema, domain, sensitivity level, or compliance tag.
 ```
 
-You can also test query validation:
+Pick one fully qualified table name returned by Metatate. You can then test
+query validation with that asset:
 
 ```text
 /metatate:validate-query
@@ -103,8 +105,10 @@ You can also test query validation:
 Example:
 
 ```text
-Validate this SQL for analytics use by role ANALYST:
-select * from METATATE_TEST_DB.PUBLIC.CUSTOMERS;
+Validate this SQL for <your-intended-use> by role <your-snowflake-role>:
+select <column_list>
+from <fully-qualified-governed-table>
+limit 10;
 ```
 
 ## Updating

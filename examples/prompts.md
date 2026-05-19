@@ -7,54 +7,60 @@ is connected.
 
 ```text
 /metatate:discover-context
-Find governed customer data with PII in the analytics domain.
+Show governed assets I can inspect. If you need to narrow the search, ask me
+for a database, schema, domain, sensitivity level, or compliance tag.
 ```
 
 ```text
 /metatate:discover-context
-Show sensitive assets related to GDPR in database ANALYTICS.
+Find governed assets in database <database_name> and schema <schema_name>.
 ```
 
 ## Inspect Data Meaning
 
 ```text
 /metatate:inspect-data
-Explain the governed meaning of METATATE_TEST_DB.PUBLIC.CUSTOMERS.
+Explain the governed meaning of <fully-qualified-governed-table>.
 ```
 
 ```text
 /metatate:inspect-data
-What does column EMAIL mean in METATATE_TEST_DB.PUBLIC.CUSTOMERS, and is it PII?
+What does column <column_name> mean in <fully-qualified-governed-table>, and
+what sensitivity or PII facts are known?
 ```
 
 ## Inspect Governance Rules
 
 ```text
 /metatate:inspect-rules
-Which rules apply to METATATE_TEST_DB.PUBLIC.CUSTOMERS for analytics use?
+Which rules apply to <fully-qualified-governed-table> for <your-intended-use>?
 ```
 
 ## Authorize Data Use
 
 ```text
 /metatate:authorize-use
-Can role ANALYST read METATATE_TEST_DB.PUBLIC.CUSTOMERS for customer churn analysis?
+Can role <your-snowflake-role> read <fully-qualified-governed-table> for
+<your-intended-use>?
 ```
 
 ```text
 /metatate:authorize-use
-Can role DATA_SCIENTIST export METATATE_TEST_DB.PUBLIC.CUSTOMERS to a US-based ML platform?
+Can role <your-snowflake-role> export columns <column_list> from
+<fully-qualified-governed-table> to <destination-system> in
+<destination-jurisdiction> for <your-intended-use>?
 ```
 
 ## Validate Query Context
 
 ```text
 /metatate:validate-query
-Validate this SQL for analytics use by role ANALYST:
+Validate this SQL for <your-intended-use> by role <your-snowflake-role>:
 
-select email, last_purchase_at
-from METATATE_TEST_DB.PUBLIC.CUSTOMERS
-where country = 'US';
+select <column_list>
+from <fully-qualified-governed-table>
+where <business-filter>
+limit 10;
 ```
 
 ## Explain A Decision
