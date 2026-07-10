@@ -52,7 +52,9 @@ live schemas win.
   and `consumer_jurisdiction` — as short identifier tokens (max 64 chars).
   With transfer context, transfer rules are evaluated
   destination-specifically (authored order, first match wins; unmatched
-  context falls to the authored default).
+  context falls to the authored default). A destination-resolved transfer
+  answer can return `decision: "conditional"` with the specific `conditions`
+  (approval, anonymize-first).
 - `validate_query_context`: required `sql` (max 100k chars); optional
   `default_database`, `default_schema`, an intent (`scenario_key` or `use`),
   and the same transfer context. Without intent, only always-applicable read
@@ -91,6 +93,11 @@ Except `inspect_data_meaning`, every tool answers one of three states:
   present) and never guesses.
 - On `scenario_unresolved`, fetch the asset's `scenario_keys` and ask the user
   to pick.
+- For transfer questions, pass the asset's transfer scenario key (usually
+  `residency.cross_border_transfer`) explicitly alongside the destination
+  context. The automatic destination fallback applies only when the use text
+  maps to nothing — words like "export" map to `export.external` and can miss
+  the transfer rules.
 - Pass intent to `validate_query_context` whenever the user states a purpose,
   and transfer context whenever data leaves (export, send, share, train
   elsewhere).

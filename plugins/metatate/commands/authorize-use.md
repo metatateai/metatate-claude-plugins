@@ -16,7 +16,10 @@ Collect or infer:
 - transfer context whenever data leaves the platform (export, send, share):
   `operation`, `destination` (`{"system": ..., "jurisdiction": ...}`), and
   `consumer_jurisdiction` as short identifier tokens, so transfer rules
-  answer destination-specifically
+  answer destination-specifically. For these transfer questions also pass the
+  asset's transfer scenario key (usually `residency.cross_border_transfer`)
+  as `scenario_key` — free text like "export" can map to a different
+  scenario and miss the transfer rules
 
 Report the decision, `decision_id`, reason, obligations, conditions
 (approval, anonymize-first, role), prohibitions, `next_actions`,
