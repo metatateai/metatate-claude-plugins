@@ -7,6 +7,8 @@ on:
       - main
     tags:
       - "v*"
+      - "metatate-v*"
+      - "metatate-snow-v*"
 
 permissions:
   contents: read
@@ -32,16 +34,54 @@ jobs:
       - name: Validate Claude marketplace
         run: claude plugin validate .
 
-      - name: Validate Claude plugin
+      - name: Validate cloud plugin
         run: claude plugin validate plugins/metatate
 
-      - name: Validate helper shell syntax
-        run: bash -n plugins/metatate/bin/metatate-mcp-add
+      - name: Validate snowflake plugin
+        run: claude plugin validate plugins/metatate-snow
 
-      - name: Validate helper role-scoped OAuth output
+      - name: Validate cloud helper shell syntax
+        run: bash -n plugins/metatate/bin/metatate-cloud-mcp-add
+
+      - name: Validate snowflake helper shell syntax
+        run: bash -n plugins/metatate-snow/bin/metatate-mcp-add
+
+      - name: Validate cloud helper print mode never leaks tokens
         run: |
           output="$(
-            plugins/metatate/bin/metatate-mcp-add \
+            METATATE_MCP_TOKEN=mtt_0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef \
+            plugins/metatate/bin/metatate-cloud-mcp-add \
+              --url https://mcp.example.test \
+              --config-scope user 2>/dev/null
+          )"
+          printf '%s\n' "$output"
+          printf '%s' "$output" | grep -q 'claude mcp add-json'
+          printf '%s' "$output" | grep -q 'mcp.example.test/mcp'
+          printf '%s' "$output" | grep -q -- '--scope user'
+          printf '%s' "$output" | grep -q 'your-access-token'
+          if printf '%s' "$output" | grep -q 'mtt_0123456789abcdef'; then
+            echo 'real token leaked into print-mode output' >&2
+            exit 1
+          fi
+
+      - name: Validate cloud helper URL normalization and required flag
+        run: |
+          output="$(plugins/metatate/bin/metatate-cloud-mcp-add --url https://mcp.example.test/mcp/ 2>/dev/null)"
+          printf '%s\n' "$output"
+          printf '%s' "$output" | grep -q 'mcp.example.test/mcp'
+          if printf '%s' "$output" | grep -q 'mcp/mcp'; then
+            echo 'URL normalization produced a doubled /mcp path' >&2
+            exit 1
+          fi
+          if plugins/metatate/bin/metatate-cloud-mcp-add >/dev/null 2>&1; then
+            echo 'expected non-zero exit when --url is missing' >&2
+            exit 1
+          fi
+
+      - name: Validate snowflake helper role-scoped OAuth output
+        run: |
+          output="$(
+            plugins/metatate-snow/bin/metatate-mcp-add \
               --account-url https://example.snowflakecomputing.com \
               --client-id TEST_CLIENT_ID \
               --snowflake-role METATATE_CLAUDE_USER \

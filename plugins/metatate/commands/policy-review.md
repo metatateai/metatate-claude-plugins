@@ -9,11 +9,15 @@ needed, then use Metatate MCP tools for governed facts.
 
 Preferred sequence:
 
-1. `discover-context` for unclear assets.
-2. `get-decision-context` for each likely governed table.
-3. `inspect-data-meaning` and `inspect-governance-rules` for sensitive assets.
-4. `authorize-use` or `validate-query-context` when the user asks if work can
+1. `discover_context` for unclear assets (each asset lists its
+   `scenario_keys`).
+2. `get_decision_context` (`asset`, optional `scenario_key`) for each likely
+   governed table.
+3. `inspect_data_meaning` and `inspect_governance_rules` for sensitive assets.
+4. `authorize_use` or `validate_query_context` when the user asks if work can
    proceed.
 
+`not_enough_published_state` answers ARE the gap findings — report their
+`reason_code` and `unresolved_targets` as missing coverage, not as failures.
 Return existing coverage, gaps, questions for governance, and recommended next
 review steps. Do not create or deploy policy.

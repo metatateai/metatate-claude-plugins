@@ -4,10 +4,13 @@ description: Inspect active governance, usage, validation, and transfer rules fo
 
 # Inspect Governance Rules
 
-Use the `metatate` MCP tool `inspect-governance-rules`.
+Use the `metatate` MCP tool `inspect_governance_rules`.
 
-Require a fully qualified `table_name` when it is not already clear. If the user
-mentions one column, pass it as `column_name`; otherwise omit `column_name`.
+Pass the asset as `asset`: `{"database": ..., "schema": ..., "table": ...}`,
+adding `"column"` when the user names one. Add `scenario_key` only when a
+canonical key is already known from `discover_context` output or the user.
 
-Summarize active usage rules, validation rules, transfer rules, conditions,
-obligations, and relevant provenance.
+Summarize the returned instruction rules, conditions, obligations, and policy
+provenance. On `review_required`, present every conflicting source — never
+pick a winner. On `not_enough_published_state`, relay `reason_code`,
+`unresolved_targets`, and `next_actions`; do not guess.

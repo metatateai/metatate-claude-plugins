@@ -1,0 +1,120 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+name="metatate"
+url=""
+config_scope=""
+token_env="METATATE_MCP_TOKEN"
+run_command="false"
+token_placeholder="mtt_<your-access-token>"
+
+usage() {
+  cat <<'EOF'
+Usage:
+  metatate-cloud-mcp-add --url https://<workspace-mcp-host> [options]
+
+Options:
+  --url <url>               Metatate Cloud MCP server URL (base or full /mcp
+                            endpoint). Copy it from your workspace's
+                            MCP -> Connect tab.
+  --name <name>             Claude MCP server name. Default: metatate
+  --config-scope <scope>    Claude MCP config scope: local, user, or project.
+  --token-env <var>         Environment variable read for the access token in
+                            --run mode. Default: METATATE_MCP_TOKEN
+  --run                     Read the token (env var or hidden prompt) and
+                            execute the generated claude command.
+  -h, --help                Show this help.
+
+Without --run, the printed command contains the placeholder
+mtt_<your-access-token>; a real token is never printed. Issue access tokens in
+your workspace's MCP -> Tokens tab (shown exactly once; revocable). Do not put
+tokens in plugin files, command arguments, or shell history — prefer --run.
+EOF
+}
+
+while [[ $# -gt 0 ]]; do
+  case "$1" in
+    --url)
+      url="${2:?missing value for --url}"
+      shift 2
+      ;;
+    --name)
+      name="${2:?missing value for --name}"
+      shift 2
+      ;;
+    --config-scope)
+      config_scope="${2:?missing value for --config-scope}"
+      shift 2
+      ;;
+    --token-env)
+      token_env="${2:?missing value for --token-env}"
+      shift 2
+      ;;
+    --run)
+      run_command="true"
+      shift
+      ;;
+    -h|--help)
+      usage
+      exit 0
+      ;;
+    *)
+      echo "Unknown argument: $1" >&2
+      usage >&2
+      exit 2
+      ;;
+  esac
+done
+
+if [[ -z "${url}" ]]; then
+  usage >&2
+  exit 2
+fi
+
+while [[ "${url}" == */ ]]; do
+  url="${url%/}"
+done
+if [[ "${url}" != */mcp ]]; then
+  url="${url}/mcp"
+fi
+
+token="${token_placeholder}"
+if [[ "${run_command}" == "true" ]]; then
+  token="${!token_env:-}"
+  if [[ -z "${token}" ]]; then
+    read -rs -p "Paste Metatate access token (input hidden): " token
+    echo "" >&2
+  fi
+  if [[ -z "${token}" ]]; then
+    echo "No access token provided." >&2
+    exit 2
+  fi
+  if ! [[ "${token}" =~ ^mtt_[0-9a-f]{64}$ ]]; then
+    echo "Warning: token does not match the expected mtt_<64-hex> format; continuing." >&2
+  fi
+fi
+
+config_json="$(
+  ENDPOINT="${url}" \
+  TOKEN="${token}" \
+  python3 -c 'import json, os
+print(json.dumps({
+    "type": "http",
+    "url": os.environ["ENDPOINT"],
+    "headers": {"Authorization": "Bearer " + os.environ["TOKEN"]},
+}, separators=(",", ":")))'
+)"
+
+cmd=(claude mcp add-json)
+if [[ -n "${config_scope}" ]]; then
+  cmd+=(--scope "${config_scope}")
+fi
+cmd+=("${name}" "${config_json}")
+
+if [[ "${run_command}" == "true" ]]; then
+  exec "${cmd[@]}"
+fi
+
+printf '%q ' "${cmd[@]}"
+printf '\n'
+echo "Replace ${token_placeholder} with a real token only if you accept shell-history exposure; prefer --run." >&2

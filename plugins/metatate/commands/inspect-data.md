@@ -4,11 +4,13 @@ description: Explain governed data meaning, classification, sensitivity, PII, an
 
 # Inspect Governed Data
 
-Use the `metatate` MCP tool `inspect-data-meaning`.
+Use the `metatate` MCP tool `inspect_data_meaning`.
 
-Require a fully qualified `table_name` when it is not already clear. If the user
-mentions one column, pass it as `column_name`; otherwise omit `column_name` to
-inspect the table.
+Pass the asset as `ref`: `{"database": ..., "schema": ..., "table": ...}` with
+normalized lowercase names. This tool takes `ref`, not `asset`. If the user
+mentions one column, add `"column"`; otherwise omit it to inspect the table.
 
-Summarize column meaning, sensitivity, PII flags, masking facts, data type
-labels, and source policy references.
+The output is a plain object with no answer state: `meaning`, `data_type`,
+`classification` (sensitivity, category, subcategory), `pii`, and `masking`
+(type plus exempt roles). Summarize those facts; an unknown asset is an
+`asset_not_found` error.

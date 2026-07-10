@@ -1,0 +1,19 @@
+{
+  "name": "metatate-snow",
+  "displayName": "Metatate for Snowflake",
+  "version": "0.2.0",
+  "description": "Use Metatate structured context and policy decisions from Claude Code through the Snowflake-managed MCP server registered by the Metatate Native App.",
+  "author": {
+    "name": "Metatate"
+  },
+  "homepage": "https://metatate.ai",
+  "repository": "https://github.com/metatateai/metatate-claude-plugins",
+  "license": "MIT",
+  "keywords": [
+    "governance",
+    "snowflake",
+    "mcp",
+    "data-policy",
+    "claude-code"
+  ]
+}
