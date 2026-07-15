@@ -124,10 +124,6 @@ Update the marketplace metadata:
 Then update the plugin from Claude Code's plugin UI, or reinstall it if your
 Claude Code version does not expose update actions in the UI.
 
-> Upgrading from 0.1.x? The plugin was named `metatate` then. Uninstall it and
-> install `metatate-snow@metatate-claude-plugins` — the `metatate` name now
-> belongs to the Metatate Cloud plugin.
-
 ## Removing
 
 Remove the MCP server:

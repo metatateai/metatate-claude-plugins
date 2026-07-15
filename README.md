@@ -363,8 +363,7 @@ See [CHANGELOG.md](CHANGELOG.md).
 Each plugin is versioned independently. Keep a plugin's
 `plugins/<name>/.claude-plugin/plugin.json#version` aligned with its entry in
 `.claude-plugin/marketplace.json`, add a CHANGELOG section, and tag releases
-per plugin: `metatate-vX.Y.Z` and `metatate-snow-vX.Y.Z` (tags `v0.1.0`
-through `v0.1.3` predate the split and refer to the Snowflake-era `metatate`).
+per plugin: `metatate-vX.Y.Z` and `metatate-snow-vX.Y.Z`.
 
 For enterprise rollout, teams can pin the Claude marketplace to a branch or tag
 when they add the marketplace, then move to a newer tag after internal testing.

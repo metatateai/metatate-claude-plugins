@@ -1,16 +1,14 @@
 # Changelog
 
-Entries are per plugin from 0.2.0 onward. Versions 0.1.0–0.1.3 predate the
-split and describe the Snowflake-era `metatate` plugin (now `metatate-snow`).
+Entries are per plugin from 0.2.0 onward. Versions 0.1.0–0.1.3 describe the
+Snowflake plugin (now `metatate-snow`) before the marketplace carried two
+plugins.
 
 ## metatate 0.2.0
 
-- **BREAKING — platform identity change.** The `metatate` plugin now targets
-  **Metatate Cloud** (the hosted workspace MCP server) instead of the
-  Snowflake Native App. Snowflake users: `/plugin uninstall metatate`, then
-  `/plugin install metatate-snow@metatate-claude-plugins`.
-- Rewrote all eight commands and the `metatate-governance` skill for the
-  Metatate Cloud contract: snake_case tool names (`discover_context`, …),
+- New plugin for **Metatate Cloud** (the hosted workspace MCP server). The
+  eight commands and the `metatate-governance` skill teach the Metatate
+  Cloud contract: snake_case tool names (`discover_context`, …),
   structured asset references (`{"database", "schema", "table", "column"}`),
   the typed three-state answer model (`answered` / `review_required` /
   `not_enough_published_state` with stable `reason_code`s), canonical
