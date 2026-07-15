@@ -9,18 +9,6 @@ data meaning, business logic, policies, lineage, access rules, runtime
 conditions, and decision evidence. This marketplace ships two Claude Code
 plugins that let Claude query that context through Metatate's MCP servers.
 
-> **Breaking change in 0.2.0:** the `metatate` plugin now targets **Metatate
-> Cloud**. If you use the Metatate **Snowflake Native App**, uninstall
-> `metatate` and install `metatate-snow` instead:
->
-> ```text
-> /plugin uninstall metatate
-> /plugin install metatate-snow@metatate-claude-plugins
-> ```
->
-> Versions 0.1.x of the `metatate` plugin were the Snowflake plugin; updating
-> a 0.1.x install changes its target platform to Metatate Cloud.
-
 ## Which Plugin Do I Install?
 
 | You run Metatate as | Install | MCP server | Auth |
