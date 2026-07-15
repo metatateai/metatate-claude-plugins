@@ -1,6 +1,78 @@
 # Troubleshooting
 
-## The Role ALL Is Blocked
+Sections: [Metatate Cloud](#metatate-cloud) · [Snowflake Native App](#snowflake-native-app) · [Either platform](#either-platform)
+
+## Metatate Cloud
+
+### Every Call Returns `unauthorized`
+
+The server returns the same `unauthorized` error whether the token is missing,
+malformed, expired, revoked, or simply wrong — it never says which.
+
+Fix:
+
+1. Check the registration points at the right endpoint:
+
+   ```bash
+   claude mcp get metatate
+   ```
+
+   The URL must end in `/mcp` and match the endpoint shown on your workspace's
+   Connect tab (staging and production workspaces have different hosts).
+
+2. Mint a new token in the workspace's MCP → Tokens tab (admin or owner role)
+   and re-register:
+
+   ```bash
+   ./plugins/metatate/bin/metatate-cloud-mcp-add --url https://<workspace-mcp-host> --config-scope user --run
+   ```
+
+### `auth_unavailable` (503)
+
+Infrastructure-side, not your token. Retry later; if it persists, check the
+endpoint health (no token needed):
+
+```bash
+curl -sS https://<workspace-mcp-host>/health
+```
+
+### `rate_limited` (429)
+
+The per-token rate limit was hit. Wait for the `Retry-After` interval (60
+seconds) and retry once. If multiple agents or teammates share one token,
+issue a separate token per seat in the Tokens tab.
+
+### `quota_exceeded`
+
+The workspace's metered MCP-call quota for the billing period is exhausted —
+every tool call meters one call. This is not fixable client-side; review the
+workspace plan and usage.
+
+### Claude Calls The Wrong Tool Names Or Argument Shapes
+
+Metatate Cloud lists snake_case tools (`discover_context`, `authorize_use`)
+that take structured references like
+`{"database": ..., "schema": ..., "table": ...}`. Hyphenated names and flat
+`table_name` strings belong to the Snowflake-managed server and the
+`metatate-snow` plugin.
+
+Fix: for Cloud workspaces install `metatate@metatate-claude-plugins` (not
+`metatate-snow`), and keep only one of the two plugins installed.
+
+### Both Plugins Installed And The Server Name Collides
+
+Both platforms register their MCP server as `metatate` by default. If you
+really need both connections on one machine, give one a different name:
+
+```bash
+./plugins/metatate/bin/metatate-cloud-mcp-add --url https://<workspace-mcp-host> --name metatate-cloud --config-scope user --run
+```
+
+Claude matches tools, not server names, so the commands keep working.
+
+## Snowflake Native App
+
+### The Role ALL Is Blocked
 
 Error:
 
@@ -40,7 +112,7 @@ Fix:
 
 Users should not need to change their default Snowflake role to fix this.
 
-## Browser Login Completes But Claude Still Shows Disconnected
+### Browser Login Completes But Claude Still Shows Disconnected
 
 Check:
 
@@ -52,7 +124,7 @@ Check:
 
 If your team uses a different callback port, update both Snowflake and Claude.
 
-## Claude Cannot Find The Metatate MCP Tools
+### Claude Cannot Find The Metatate MCP Tools
 
 Check the MCP registration:
 
@@ -82,7 +154,7 @@ Expected tools:
 - `validate-query-context`
 - `explain-why`
 
-## OAuth Client Secret Was Pasted Into Shell History
+### OAuth Client Secret Was Pasted Into Shell History
 
 Rotate the Snowflake OAuth client secret and remove the exposed value from shell
 history according to your organization's security process.
@@ -96,7 +168,9 @@ claude mcp add-json --scope user --client-secret metatate '<json-config>'
 The `--client-secret` flag makes Claude Code prompt for the secret instead of
 requiring it in the command.
 
-## Plugin Installed But Slash Commands Are Missing
+## Either Platform
+
+### Plugin Installed But Slash Commands Are Missing
 
 Check:
 
@@ -104,7 +178,9 @@ Check:
 /plugin
 ```
 
-Confirm `metatate@metatate-claude-plugins` is installed and enabled.
+Confirm the plugin you installed — `metatate@metatate-claude-plugins`
+(Metatate Cloud) or `metatate-snow@metatate-claude-plugins` (Snowflake) — is
+installed and enabled.
 
 Then check:
 
@@ -119,18 +195,15 @@ marketplace:
 /plugin marketplace update metatate-claude-plugins
 ```
 
-## Permission Or Policy Result Looks Unexpected
+### Permission Or Policy Result Looks Unexpected
 
 Metatate is the source of truth for governance decisions. Capture:
 
-- User Snowflake role.
+- Actor role (workspace member or Snowflake role).
 - Table or asset name.
 - Operation and intended use.
 - Decision ID or validation ID returned by Metatate.
 - Claude prompt used.
 
-Then review the decision with:
-
-```text
-/metatate:explain-decision
-```
+Then review the decision with `/metatate:explain-decision` (Metatate Cloud) or
+`/metatate-snow:explain-decision` (Snowflake).

@@ -1,7 +1,9 @@
-# Claude Code Install Guide
+# Claude Code Install Guide (Snowflake Native App)
 
-This guide is for users after a Snowflake administrator has created the
-Metatate OAuth integration.
+This guide is for users of the Metatate **Snowflake Native App**, after a
+Snowflake administrator has created the Metatate OAuth integration. Using
+Metatate Cloud instead? See
+[metatate-cloud-install.md](metatate-cloud-install.md).
 
 ## Values You Need
 
@@ -25,7 +27,7 @@ Open Claude Code and add the marketplace:
 Install the plugin:
 
 ```text
-/plugin install metatate@metatate-claude-plugins
+/plugin install metatate-snow@metatate-claude-plugins
 ```
 
 Restart Claude Code if prompted.
@@ -35,7 +37,7 @@ Restart Claude Code if prompted.
 If you cloned the marketplace repository locally, run this in your terminal:
 
 ```bash
-./plugins/metatate/bin/metatate-mcp-add \
+./plugins/metatate-snow/bin/metatate-mcp-add \
   --account-url https://<account-url> \
   --client-id <snowflake-oauth-client-id> \
   --snowflake-role <snowflake-role> \
@@ -84,7 +86,7 @@ Select `metatate` and authenticate with Snowflake.
 Run:
 
 ```text
-/metatate:discover-context
+/metatate-snow:discover-context
 ```
 
 Then ask for a governed context your Metatate deployment knows about, for
@@ -99,7 +101,7 @@ Pick one fully qualified table name returned by Metatate. You can then test
 query validation with that asset:
 
 ```text
-/metatate:validate-query
+/metatate-snow:validate-query
 ```
 
 Example:
@@ -133,5 +135,5 @@ claude mcp remove metatate
 Then uninstall the plugin:
 
 ```text
-/plugin uninstall metatate@metatate-claude-plugins
+/plugin uninstall metatate-snow@metatate-claude-plugins
 ```

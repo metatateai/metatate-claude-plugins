@@ -1,6 +1,6 @@
 {
   "name": "metatate-claude-plugins",
-  "description": "Claude Code plugins for Metatate structured context and decision workflows through Snowflake-managed MCP.",
+  "description": "Claude Code plugins for Metatate structured context and decision workflows on Metatate Cloud and the Snowflake Native App.",
   "owner": {
     "name": "Metatate"
   },
@@ -8,8 +8,17 @@
     {
       "name": "metatate",
       "source": "./plugins/metatate",
-      "description": "Structured data context, authorization, query validation, and decision explanations for Claude Code.",
-      "version": "0.1.3",
+      "description": "Structured data context, authorization, query validation, and decision explanations for Claude Code via the Metatate Cloud MCP server.",
+      "version": "0.2.0",
+      "author": {
+        "name": "Metatate"
+      }
+    },
+    {
+      "name": "metatate-snow",
+      "source": "./plugins/metatate-snow",
+      "description": "Structured data context, authorization, query validation, and decision explanations for Claude Code via the Snowflake-managed MCP server (Metatate Native App).",
+      "version": "0.2.0",
       "author": {
         "name": "Metatate"
       }
