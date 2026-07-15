@@ -9,6 +9,22 @@ data meaning, business logic, policies, lineage, access rules, runtime
 conditions, and decision evidence. This marketplace ships two Claude Code
 plugins that let Claude query that context through Metatate's MCP servers.
 
+## New To Metatate? Start Free
+
+You don't need an existing Metatate deployment to try this:
+
+1. **Create a free Metatate Cloud account** at
+   [app.getmetatate.com/sign-up?ref=claude-plugins](https://app.getmetatate.com/sign-up?ref=claude-plugins)
+   and create a workspace — the free plan covers everything on this page.
+2. On the new workspace's dashboard, follow the **"New here?" banner → Load
+   the demo**, then click **Load the AcmeCloud demo**. It publishes a governed
+   demo domain (five tables, three policies, one live publication), so Claude
+   gets real decisions immediately.
+3. Install the `metatate` plugin and connect it — see
+   [Metatate Cloud (`metatate`)](#metatate-cloud-metatate) below.
+
+Already running Metatate? Pick the plugin that matches your deployment.
+
 ## Which Plugin Do I Install?
 
 | You run Metatate as | Install | MCP server | Auth |
@@ -77,7 +93,9 @@ metatate-claude-plugins/
 
 ### Requirements
 
-- A Metatate Cloud workspace with a published governance deployment.
+- A Metatate Cloud workspace with a published governance deployment —
+  [create one free](https://app.getmetatate.com/sign-up?ref=claude-plugins)
+  and load the AcmeCloud demo if you don't have one yet.
 - Access to the workspace's MCP module at
   `https://<workspace-host>/<workspace>/mcp`. Issuing access tokens requires
   the admin or owner role; any member can use an issued token.

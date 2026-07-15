@@ -7,6 +7,11 @@ Metatate Cloud MCP server — the hosted, cross-platform Metatate workspace.
 > `metatate-snow` plugin — see
 > [`plugins/metatate-snow/README.md`](../metatate-snow/README.md).
 
+No Metatate workspace yet?
+[Create a free account](https://app.getmetatate.com/sign-up?ref=claude-plugins)
+and load the AcmeCloud demo from the dashboard's "New here?" banner to get a
+governed workspace in minutes.
+
 ## What It Does
 
 The plugin adds Claude Code commands for:

@@ -4,6 +4,12 @@ This guide is for users of **Metatate Cloud** — the hosted Metatate workspace.
 Using the Snowflake Native App instead? See
 [claude-code-install.md](claude-code-install.md).
 
+No workspace yet?
+[Create a free Metatate Cloud account](https://app.getmetatate.com/sign-up?ref=claude-plugins),
+create a workspace, and load the **AcmeCloud demo** from the dashboard's
+"New here?" banner — it publishes a governed demo domain that every step in
+this guide works against.
+
 ## Values You Need
 
 From your workspace's MCP module at
