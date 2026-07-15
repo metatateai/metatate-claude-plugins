@@ -23,6 +23,12 @@ You don't need an existing Metatate deployment to try this:
 3. Install the `metatate` plugin and connect it — see
    [Metatate Cloud (`metatate`)](#metatate-cloud-metatate) below.
 
+The same AcmeCloud demo domain powers
+[metatate-examples](https://github.com/metatateai/metatate-examples) — a
+cookbook of runnable notebooks (governed SQL agents, destination-aware
+transfer gates before export, CI policy gates for data/AI changes, RAG
+ingestion checks) that you can point at the same workspace and access token.
+
 Already running Metatate? Pick the plugin that matches your deployment.
 
 ## Which Plugin Do I Install?
