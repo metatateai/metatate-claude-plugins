@@ -188,6 +188,11 @@ The Metatate Cloud MCP server exposes these tools:
 
 ## Metatate on Snowflake (`metatate-snow`)
 
+Runnable notebook examples for the Snowflake Native App live at
+[metatate-snowflake-examples](https://github.com/metatateai/metatate-snowflake-examples)
+(stable / maintenance mode; the actively developed Metatate Cloud cookbook is
+[metatate-examples](https://github.com/metatateai/metatate-examples)).
+
 ### Requirements
 
 For the Snowflake administrator:
