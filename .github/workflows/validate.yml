@@ -32,13 +32,25 @@ jobs:
         run: npm install -g @anthropic-ai/claude-code
 
       - name: Validate Claude marketplace
-        run: claude plugin validate .
+        run: claude plugin validate . --strict
 
       - name: Validate cloud plugin
-        run: claude plugin validate plugins/metatate
+        run: claude plugin validate plugins/metatate --strict
 
       - name: Validate snowflake plugin
-        run: claude plugin validate plugins/metatate-snow
+        run: claude plugin validate plugins/metatate-snow --strict
+
+      - name: Validate plugin versions align with marketplace entries
+        run: |
+          for plugin in metatate metatate-snow; do
+            plugin_version="$(jq -r '.version' "plugins/${plugin}/.claude-plugin/plugin.json")"
+            marketplace_version="$(jq -r --arg name "$plugin" '.plugins[] | select(.name == $name) | .version' .claude-plugin/marketplace.json)"
+            echo "${plugin}: plugin.json=${plugin_version} marketplace.json=${marketplace_version}"
+            if [ "$plugin_version" != "$marketplace_version" ]; then
+              echo "::error title=version drift::${plugin} plugin.json (${plugin_version}) != marketplace.json (${marketplace_version}) — plugin.json silently wins at install time; keep them aligned" >&2
+              exit 1
+            fi
+          done
 
       - name: Validate cloud helper shell syntax
         run: bash -n plugins/metatate/bin/metatate-cloud-mcp-add

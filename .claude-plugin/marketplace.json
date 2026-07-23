@@ -7,21 +7,45 @@
   "plugins": [
     {
       "name": "metatate",
+      "displayName": "Metatate",
       "source": "./plugins/metatate",
       "description": "Structured data context, authorization, query validation, and decision explanations for Claude Code via the Metatate Cloud MCP server.",
       "version": "0.2.1",
       "author": {
         "name": "Metatate"
-      }
+      },
+      "homepage": "https://getmetatate.com",
+      "repository": "https://github.com/metatateai/metatate-claude-plugins",
+      "license": "MIT",
+      "category": "data-governance",
+      "keywords": [
+        "governance",
+        "mcp",
+        "data-policy",
+        "claude-code",
+        "cloud"
+      ]
     },
     {
       "name": "metatate-snow",
+      "displayName": "Metatate for Snowflake",
       "source": "./plugins/metatate-snow",
       "description": "Structured data context, authorization, query validation, and decision explanations for Claude Code via the Snowflake-managed MCP server (Metatate Native App).",
       "version": "0.2.0",
       "author": {
         "name": "Metatate"
-      }
+      },
+      "homepage": "https://getmetatate.com",
+      "repository": "https://github.com/metatateai/metatate-claude-plugins",
+      "license": "MIT",
+      "category": "data-governance",
+      "keywords": [
+        "governance",
+        "snowflake",
+        "mcp",
+        "data-policy",
+        "claude-code"
+      ]
     }
   ]
 }
