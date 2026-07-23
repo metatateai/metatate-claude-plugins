@@ -398,8 +398,14 @@ See [CHANGELOG.md](CHANGELOG.md).
 
 Each plugin is versioned independently. Keep a plugin's
 `plugins/<name>/.claude-plugin/plugin.json#version` aligned with its entry in
-`.claude-plugin/marketplace.json`, add a CHANGELOG section, and tag releases
-per plugin: `metatate-vX.Y.Z` and `metatate-snow-vX.Y.Z`.
+`.claude-plugin/marketplace.json` (CI enforces this), add a CHANGELOG section,
+and tag releases per plugin: `metatate-vX.Y.Z` and `metatate-snow-vX.Y.Z`.
+
+Claude Code disables auto-update for third-party marketplaces by default. To
+pick up new releases automatically, open `/plugin`, select this marketplace
+under **Marketplaces**, and enable auto-update — or run
+`/plugin marketplace update metatate-claude-plugins` when you want to refresh
+manually.
 
 For enterprise rollout, teams can pin the Claude marketplace to a branch or tag
 when they add the marketplace, then move to a newer tag after internal testing.
