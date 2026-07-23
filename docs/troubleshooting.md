@@ -48,16 +48,27 @@ The workspace's metered MCP-call quota for the billing period is exhausted —
 every tool call meters one call. This is not fixable client-side; review the
 workspace plan and usage.
 
-### Claude Calls The Wrong Tool Names Or Argument Shapes
+### Calls Fail With `invalid_parameters` (Snowflake-Shaped Arguments)
 
 Metatate Cloud lists snake_case tools (`discover_context`, `authorize_use`)
 that take structured references like
-`{"database": ..., "schema": ..., "table": ...}`. Hyphenated names and flat
-`table_name` strings belong to the Snowflake-managed server and the
-`metatate-snow` plugin.
+`{"database": ..., "schema": ..., "table": ...}`. Flat `table_name`,
+`columns_csv`, and `sql_text` arguments belong to the Snowflake-managed
+server and the `metatate-snow` plugin; the Cloud server's strict schemas
+reject them with `invalid_parameters`. (Hyphenated tool names alone are
+tolerated — the Cloud server accepts them as 1:1 aliases of the snake_case
+tools — so the argument shape, not the tool name, is what breaks.)
 
 Fix: for Cloud workspaces install `metatate@metatate-claude-plugins` (not
 `metatate-snow`), and keep only one of the two plugins installed.
+
+### What Did The Server Actually Answer?
+
+Every Metatate Cloud tool call is logged server-side. Workspace admins can
+open MCP → Tokens and follow a token's **View requests** link to see each
+call's asset, scenario key, answer state, decision, and error code — useful
+to confirm whether a call reached the server and what it answered. SQL and
+intended-use text are never logged.
 
 ### Both Plugins Installed And The Server Name Collides
 

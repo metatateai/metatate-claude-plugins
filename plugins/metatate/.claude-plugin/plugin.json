@@ -1,7 +1,7 @@
 {
   "name": "metatate",
   "displayName": "Metatate",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Use Metatate structured context and policy decisions from Claude Code through the Metatate Cloud MCP server.",
   "author": {
     "name": "Metatate"

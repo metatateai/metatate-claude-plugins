@@ -9,8 +9,10 @@ Metatate Cloud MCP server — the hosted, cross-platform Metatate workspace.
 
 No Metatate workspace yet?
 [Create a free account](https://app.getmetatate.com/sign-up?ref=claude-plugins)
-and load the AcmeCloud demo from the dashboard's "New here?" banner to get a
-governed workspace in minutes.
+and load the AcmeCloud sample workspace from the dashboard's "New here?"
+banner to get a governed workspace in minutes — the starter sample publishes
+5 governed tables under 4 policies, and "Load the full estate" expands it to
+9 tables and 15 policies for the review and release-gate workflows.
 
 ## What It Does
 
@@ -54,6 +56,11 @@ claude mcp add-json --scope user metatate '{"type":"http","url":"<mcp-server-url
 There is no OAuth flow: the bearer token is the whole handshake. Treat it like
 a password — never commit it or paste it into shared logs, and revoke it in
 the Tokens tab if it is ever exposed.
+
+Every tool call is metered and logged server-side with allow-listed fields
+only (asset path, scenario key, answer state, decision — never SQL or
+intended-use text). Workspace admins can review per-token request history
+under MCP → Tokens → View requests.
 
 If you cloned the marketplace repository, you can register without putting the
 token in shell history:

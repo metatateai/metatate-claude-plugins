@@ -87,6 +87,13 @@ Except `inspect_data_meaning`, every tool answers one of three states:
   `ai.training`, `residency.cross_border_transfer`). Never invent one. Valid
   sources: `discover_context` output (`scenario_keys`), keys echoed in prior
   answers, or the user.
+- Keys group into three lanes — `platform`, `agent`, and `human` — and
+  decision answers echo the winning `scenario_lane`. For AI workloads (RAG,
+  training, inference, embeddings, agent pipelines) prefer the asset's
+  agent-lane `ai.*` keys when discovery lists them — for example
+  `ai.retrieval_context`, `ai.training`, `ai.inference`,
+  `ai.embedding_storage`, `ai.prompt_context`, `ai.tool_use`,
+  `ai.agent_workflow` — instead of a generic human-lane purpose key.
 - Without a known key, pass the user's purpose as free-text `use`; the server
   maps it deterministically (explicit key first, then use mapping, then the
   `residency.cross_border_transfer` default when destination context is
@@ -140,3 +147,7 @@ Closed error codes with fixed messages:
   then call Metatate tools for governed context.
 - Do not request or expose raw row-level data by default.
 - Every answer is advisory; never present one as enforcement.
+- Every tool call is metered and logged server-side with allow-listed fields
+  (asset path, scenario key, answer state, decision — never SQL or `use`
+  text); workspace admins can review per-token request history in the MCP
+  module's Tokens tab.

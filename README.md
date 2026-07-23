@@ -2,7 +2,7 @@
 
 Bring Metatate's structured context and decision layer into Claude Code.
 
-![Metatate plugin in Claude Code: /metatate:discover-context lists governed assets with sensitivity and PII labels, then /metatate:authorize-use returns a CONDITIONAL decision with rationale, conditions, and a decision_id.](docs/assets/metatate-demo.svg)
+![Metatate plugin in Claude Code: /metatate:discover-context lists governed assets with instruction counts and canonical scenario keys, then /metatate:authorize-use returns an answered CONDITIONAL cross-border transfer decision with conditions, a decision_id, and publication provenance.](docs/assets/metatate-demo.svg)
 
 Metatate gives agents structured, machine-readable context for data workflows:
 data meaning, business logic, policies, lineage, access rules, runtime
@@ -16,10 +16,13 @@ You don't need an existing Metatate deployment to try this:
 1. **Create a free Metatate Cloud account** at
    [app.getmetatate.com/sign-up?ref=claude-plugins](https://app.getmetatate.com/sign-up?ref=claude-plugins)
    and create a workspace — the free plan covers everything on this page.
-2. On the new workspace's dashboard, follow the **"New here?" banner → Load
-   the demo**, then click **Load the AcmeCloud demo**. It publishes a governed
-   demo domain (five tables, three policies, one live publication), so Claude
-   gets real decisions immediately.
+2. On the new workspace's dashboard, follow the **"New here?" banner** to
+   onboarding and load the **AcmeCloud sample workspace**. The starter sample
+   publishes a governed domain (5 tables, 4 policies, one live publication), so
+   Claude gets real decisions immediately; **Load the full estate** expands it
+   to 9 tables and 15 policies — including AI-lane and collection-targeted
+   ones — with 103 published instruction rows, the better playground for
+   `/metatate:policy-review` and `/metatate:release-gate`.
 3. Install the `metatate` plugin and connect it — see
    [Metatate Cloud (`metatate`)](#metatate-cloud-metatate) below.
 
@@ -101,7 +104,7 @@ metatate-claude-plugins/
 
 - A Metatate Cloud workspace with a published governance deployment —
   [create one free](https://app.getmetatate.com/sign-up?ref=claude-plugins)
-  and load the AcmeCloud demo if you don't have one yet.
+  and load the AcmeCloud sample workspace if you don't have one yet.
 - Access to the workspace's MCP module at
   `https://<workspace-host>/<workspace>/mcp`. Issuing access tokens requires
   the admin or owner role; any member can use an issued token.
@@ -366,7 +369,7 @@ Start with [docs/troubleshooting.md](docs/troubleshooting.md).
 | Symptom | Likely Cause | Fix |
 | --- | --- | --- |
 | Metatate Cloud: every call returns `unauthorized`. | Token missing, expired, revoked, or mistyped — the server never says which. | Mint a new token in the workspace Tokens tab and re-register with `metatate-cloud-mcp-add --run`. |
-| Metatate Cloud: Claude calls hyphenated tools or flat `table_name` arguments. | The Snowflake plugin (or its conventions) is driving instead of the Cloud plugin. | Install `metatate` (not `metatate-snow`) for Cloud workspaces; keep exactly one of the two installed. |
+| Metatate Cloud: calls fail with `invalid_parameters` on flat `table_name`-style arguments. | The Snowflake plugin's contract is driving instead of the Cloud plugin's. (Hyphenated tool names alone are tolerated — the Cloud server accepts them as 1:1 aliases — but its strict schemas reject Snowflake-shaped arguments.) | Install `metatate` (not `metatate-snow`) for Cloud workspaces; keep exactly one of the two installed. |
 | Snowflake: `The role ALL requested has been explicitly blocked for use with this application.` | Claude requested the user's default role or secondary role `ALL`. | Re-register MCP with `--snowflake-role <role>` so Claude sends `session:role:<role>`, and confirm the OAuth integration allows the same role. |
 | Snowflake: browser login succeeds but Claude still shows disconnected. | Callback port or redirect URI mismatch. | Keep Snowflake `OAUTH_REDIRECT_URI` and Claude `callbackPort` aligned, normally `http://localhost:8080/callback`. |
 | Claude cannot find Metatate tools. | MCP URL or server registration is wrong. | Cloud: copy the endpoint from the Connect tab and check `curl <base>/health`. Snowflake: confirm the URL points to `METATATE_APP.CORE.METATATE_MCP`. |
@@ -379,6 +382,10 @@ Start with [docs/troubleshooting.md](docs/troubleshooting.md).
   authenticates the user through OAuth. Both secrets live only in the user's
   local Claude configuration, never in this repository.
 - Use least-privilege workspace tokens and Snowflake roles.
+- On Metatate Cloud, every tool call is logged server-side with allow-listed
+  fields only (asset path, scenario key, answer state, decision, error code —
+  never SQL or intended-use text). Workspace admins can audit per-token request
+  history under MCP → Tokens → View requests.
 - The default workflows operate on metadata, policy context, query text,
   intended use, and decision records. They should not request raw row-level
   data unless your organization explicitly allows that pattern.

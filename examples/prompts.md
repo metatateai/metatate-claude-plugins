@@ -68,6 +68,16 @@ A destination-aware transfer rule answers this: SALESFORCE typically returns
 conditional with approval and anonymize-first conditions, while ADS_PLATFORM
 returns deny. Note the `decision_id` in the answer.
 
+```text
+/metatate:authorize-use
+Can we use acmecloud_demo.public.customers as retrieval context for our
+support RAG assistant?
+```
+
+AI workloads resolve through the agent-lane `ai.*` scenario keys the asset
+lists in `discover_context` (here `ai.retrieval_context`); the full-estate
+sample also publishes `ai.training` and `ai.inference` rules.
+
 ### Validate Query Context
 
 ```text
@@ -91,6 +101,17 @@ Default database acmecloud_demo, default schema public.
 
 The same SQL can pass for one intent and fail for another — always state the
 purpose.
+
+```text
+/metatate:validate-query
+Validate this SQL for fine-tuning our churn model (scenario ai.training):
+
+select customer_name, email, arr, region
+from acmecloud_demo.public.customers;
+```
+
+An AI intent pulls the agent-lane rules into the verdict alongside the column
+rules the query touches.
 
 ### Explain A Decision
 
