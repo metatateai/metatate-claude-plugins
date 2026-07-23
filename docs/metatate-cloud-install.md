@@ -6,9 +6,11 @@ Using the Snowflake Native App instead? See
 
 No workspace yet?
 [Create a free Metatate Cloud account](https://app.getmetatate.com/sign-up?ref=claude-plugins),
-create a workspace, and load the **AcmeCloud demo** from the dashboard's
-"New here?" banner — it publishes a governed demo domain that every step in
-this guide works against.
+create a workspace, and load the **AcmeCloud sample workspace** from the
+dashboard's "New here?" banner — the starter sample publishes a governed demo
+domain (5 tables, 4 policies, one live publication) that every step in this
+guide works against, and **Load the full estate** expands it to 9 tables and
+15 policies for the `policy-review` and `release-gate` workflows.
 
 ## Values You Need
 
@@ -114,6 +116,11 @@ Can we use <database>.<schema>.<table> for <your-intended-use>?
 Claude should call the Metatate Cloud tools and return an advisory decision
 with rationale, any obligations or conditions, and a `decision_id`. Feed that
 id to `/metatate:explain-decision` to see the decision's evidence.
+
+Workspace admins can also see the calls you just made: open MCP → Tokens and
+follow the token's **View requests** link. Each entry shows the asset,
+scenario key, answer state, decision, and error code — SQL and intended-use
+text are never logged.
 
 ## Updating
 

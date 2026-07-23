@@ -17,6 +17,12 @@ Preferred sequence:
 4. `authorize_use` or `validate_query_context` when the user asks if work can
    proceed.
 
+When the work involves AI — RAG ingestion, model training, inference,
+embeddings, or agent pipelines — check the asset's agent-lane `ai.*` scenario
+keys from `discover_context` (for example `ai.retrieval_context`,
+`ai.training`, `ai.embedding_storage`) so agent-lane rules participate in the
+review, not just generic purpose keys.
+
 `not_enough_published_state` answers ARE the gap findings — report their
 `reason_code` and `unresolved_targets` as missing coverage, not as failures.
 Return existing coverage, gaps, questions for governance, and recommended next

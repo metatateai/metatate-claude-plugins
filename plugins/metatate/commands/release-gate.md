@@ -14,7 +14,9 @@ Preferred sequence:
 2. Use `discover_context` and `get_decision_context` for assets.
 3. Use `validate_query_context` for SQL queries or generated query paths —
    pass the change's intent (`scenario_key` or `use`) so intent-scoped rules
-   participate in the verdict.
+   participate in the verdict. For AI-related changes (RAG, training,
+   embeddings, agent workflows), use the matching agent-lane `ai.*` key from
+   the asset's `scenario_keys` as that intent.
 4. Use `authorize_use` for explicit intended-use questions, with transfer
    context for exports.
 5. Use `explain_why` with a returned `decision_id` when a decision needs

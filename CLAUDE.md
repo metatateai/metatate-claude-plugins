@@ -13,7 +13,7 @@ A Claude Code **plugin marketplace** that ships two plugins surfacing Metatate g
 
 There is no application runtime here. The repo is plugin manifests, command/skill markdown, two Bash helpers, and docs. The "behavior" lives in (a) what Claude does when it reads the command and skill markdown, and (b) the MCP tools exposed by the target server — not in this codebase.
 
-Users install exactly ONE of the two plugins. Before 0.2.0 the `metatate` name belonged to the Snowflake plugin; the README's migration callout and the CHANGELOG cover that history — do not remove them casually.
+Users install exactly ONE of the two plugins. Before 0.2.0 the `metatate` name belonged to the Snowflake plugin; the CHANGELOG's 0.1.x entries cover that history. The READMEs deliberately carry no migration framing (no pre-split installs existed) — do not reintroduce it.
 
 ## Validation commands
 
@@ -53,7 +53,7 @@ Two-layer split — keep these separate when editing:
 
 1. **Plugin layer (this repo).** Adds slash commands and a skill to Claude Code. Pure prompt-engineering artifacts; no code execution beyond the helper scripts.
 2. **MCP layer (NOT in this repo).** One server per platform, registered by the user:
-   - **Metatate Cloud:** stateless streamable-HTTP MCP at `POST <mcp-server-url>/mcp`; auth is a workspace-issued bearer token (`Authorization: Bearer mtt_…`); tools are snake_case (`discover_context`, `get_decision_context`, `inspect_data_meaning`, `inspect_governance_rules`, `authorize_use`, `validate_query_context`, `explain_why`) with structured snake_case inputs and the typed three-state answer model (`answered` / `review_required` / `not_enough_published_state`).
+   - **Metatate Cloud:** stateless streamable-HTTP MCP at `POST <mcp-server-url>/mcp`; auth is a workspace-issued bearer token (`Authorization: Bearer mtt_…`); tools are snake_case (`discover_context`, `get_decision_context`, `inspect_data_meaning`, `inspect_governance_rules`, `authorize_use`, `validate_query_context`, `explain_why`) with structured snake_case inputs and the typed three-state answer model (`answered` / `review_required` / `not_enough_published_state`). Hyphenated names are accepted on `tools/call` as 1:1 aliases and rewritten to canonical (`tools/list` shows only snake_case); strict schemas reject unknown/Snowflake-shaped argument keys with `invalid_parameters`. Every call is metered and logged server-side (allow-listed fields; never SQL or `use` text), viewable per token in the workspace MCP module.
    - **Snowflake:** Snowflake's managed MCP server registered by the Metatate Native App; tools are hyphenated (`discover-context`, …) with flat scalar arguments (`table_name`, `columns_csv`, `sql_text`) and a `{status, data, errors}` envelope.
 
 ### Plugin contents (both `plugins/metatate/` and `plugins/metatate-snow/`)

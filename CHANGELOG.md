@@ -4,6 +4,28 @@ Entries are per plugin from 0.2.0 onward. Versions 0.1.0–0.1.3 describe the
 Snowflake plugin (now `metatate-snow`) before the marketplace carried two
 plugins.
 
+## metatate 0.2.1
+
+- Replaced the README demo animation with the Metatate Cloud contract:
+  snake_case tool names, structured asset references, an `answered`
+  CONDITIONAL cross-border decision with a uuid `decision_id`, and publication
+  provenance. The previous image predated the 0.2.0 split and showed the
+  Snowflake contract under `/metatate:` commands.
+- Documented the MCP request log: every tool call is recorded server-side with
+  allow-listed fields (asset path, scenario key, answer state, decision —
+  never SQL or intended-use text), and workspace admins can review per-token
+  history under MCP → Tokens → View requests (README, install guide,
+  troubleshooting, and the skill).
+- Refreshed the AcmeCloud sample-workspace copy for the two-tier loader:
+  starter sample (5 tables, 4 policies, one live publication) and "Load the
+  full estate" (9 tables, 15 policies, 103 published instruction rows).
+- Taught the scenario-lane model (`platform` / `agent` / `human`, with
+  `scenario_lane` echoed in answers) and the agent-lane `ai.*` keys in the
+  skill, `policy-review`, `release-gate`, and the example prompts.
+- Corrected the troubleshooting guidance: the Cloud server accepts hyphenated
+  tool names as 1:1 aliases — Snowflake-shaped flat arguments are what fail
+  (`invalid_parameters`).
+
 ## metatate 0.2.0
 
 - New plugin for **Metatate Cloud** (the hosted workspace MCP server). The

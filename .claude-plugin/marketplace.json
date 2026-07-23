@@ -9,7 +9,7 @@
       "name": "metatate",
       "source": "./plugins/metatate",
       "description": "Structured data context, authorization, query validation, and decision explanations for Claude Code via the Metatate Cloud MCP server.",
-      "version": "0.2.0",
+      "version": "0.2.1",
       "author": {
         "name": "Metatate"
       }
